@@ -1,176 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Share+Tech+Mono&display=swap');
+
 :root {
-    --overlay-color: rgba(0, 0, 0, 0.6);
-    --highlight: #d4af37; /* Dourado do logo */
-    --dark-metal: #1a1a1a;
+    --bg-real: #050505;
+    --text-real: #b0b0b0;
+    --accent-real: #8a0000; /* Vermelho sangue */
+    
+    --bg-money: #ffffff;
+    --text-money: #1a1a1a;
+    --accent-money: #d4af37; /* Ouro */
+    
+    --font-serif: 'Cinzel', serif;
+    --font-mono: 'Share Tech Mono', monospace;
 }
 
-body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background-color: var(--dark-metal);
-    font-family: 'Cinzel', serif;
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background-color: var(--bg-real);
+    color: var(--text-real);
+    font-family: var(--font-mono);
+    overflow-x: hidden;
+    transition: background-color 0.8s ease, color 0.5s ease;
+    cursor: crosshair;
 }
 
-/* --- THE STAGE --- */
-#scene-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Background Image Layer (A Capa do Álbum) */
-#album-art {
-    position: absolute;
-    top: -5%;
-    left: -5%;
-    width: 110%;
-    height: 110%;
-    background-size: cover;
-    background-position: center center;
-    /* ******************************************************************
-    * COLOQUE AQUI O LINK DA SUA IMAGEM DE CAPA PARA O FUNDO FUNCIONAR!
-    ******************************************************************
-    */
-    background-image: url('https://placehold.co/1920x1080/1a1a1a/e3e3e3?text=IMAGEM+DA+CAPA+DO+ALBUM'); 
-    filter: grayscale(40%) contrast(1.1) brightness(0.8);
-    transition: filter 0.5s ease, transform 0.2s ease-out;
-    z-index: 0;
-}
-
-/* Rain & Lightning Canvas */
-#weather-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-    pointer-events: none;
-}
-
-/* --- HOTSPOTS (Clickable Areas) --- */
-.hotspot {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(212, 175, 55, 0.1);
-    cursor: pointer;
-    z-index: 20;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: pulse-ring 2s infinite;
-}
-
-.hotspot:hover {
-    background: rgba(212, 175, 55, 0.4);
-    transform: scale(1.2);
-    border-color: var(--highlight);
-    box-shadow: 0 0 20px var(--highlight);
-}
-
-.hotspot::after {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background: var(--highlight);
-    border-radius: 50%;
-}
-
-.hotspot .label {
-    position: absolute;
-    top: 70px;
-    width: 200px;
-    text-align: center;
-    color: white;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 0 2px 4px black;
-    opacity: 0;
-    transition: opacity 0.3s;
-    background: rgba(0,0,0,0.7);
-    padding: 4px;
-    border: 1px solid var(--highlight);
-    pointer-events: none;
-}
-
-.hotspot:hover .label {
-    opacity: 1;
-}
-
-@keyframes pulse-ring {
-    0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
-    70% { box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
-}
-
-/* Posições dos Hotspots */
-#spot-palace { top: 35%; left: 50%; transform: translate(-50%, -50%); } 
-#spot-mother { top: 55%; left: 65%; } 
-#spot-fire { top: 50%; left: 10%; } 
-#spot-plate { top: 85%; left: 80%; } 
-#spot-stroller { top: 70%; left: 25%; } 
-#spot-sky { top: 15%; left: 80%; } 
-
-/* --- UI OVERLAYS --- */
-#player-overlay {
+/* Efeito de Ruído (Noise) na tela inteira */
+.noise-overlay {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: linear-gradient(to top, black 80%, transparent 100%);
-    padding: 40px 20px;
-    z-index: 50;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.5s ease;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.15;
     pointer-events: none;
-}
-#player-overlay.active {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: all;
+    z-index: 999;
 }
 
-.lyrics-box {
-    font-family: 'Special Elite', cursive;
-    color: #ccc;
-    text-shadow: 0 1px 2px black;
-    max-height: 150px;
-    overflow-y: auto;
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    padding: 0 10px;
-}
-
-/* Start Screen */
-#curtain {
-    position: fixed;
-    inset: 0;
-    background: black;
-    z-index: 100;
+/* Estrutura das Seções */
+.track-section {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    transition: opacity 1.5s ease;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    border-bottom: 1px solid #222;
+    position: relative;
 }
 
-.glitch-text {
+/* Tipografia */
+h1.glitch-title {
+    font-family: var(--font-serif);
+    font-size: 4rem;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    margin-bottom: 1rem;
     position: relative;
-    color: var(--highlight);
-    font-size: 3rem;
-    letter-spacing: 0.2em;
-    text-shadow: 0 0 10px var(--highlight);
+}
+
+.track-title {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    color: var(--accent-real);
+    margin-bottom: 2rem;
+    transition: color 0.5s;
+}
+
+.lyrics-container {
+    font-size: 1.5rem;
+    line-height: 1.8;
+    max-width: 800px;
+}
+
+/* Texto Dual (A Mágica acontece aqui) */
+.dual-text {
+    position: relative;
+    display: inline-block;
+    border-bottom: 2px solid var(--accent-real);
+    transition: all 0.3s;
+}
+
+/* O Botão de Controle */
+.money-trigger {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.trigger-btn {
+    background: transparent;
+    border: 1px solid var(--text-real);
+    padding: 15px 30px;
+    color: var(--text-real);
+    font-family: var(--font-mono);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s;
+    background: rgba(0,0,0,0.8);
+}
+
+.trigger-btn:active {
+    transform: scale(0.95);
+}
+
+/* --- MODO DINHEIRO (Ativado via JS) --- */
+body.money-mode {
+    background-color: var(--bg-money);
+    color: var(--text-money);
+}
+
+body.money-mode .track-title {
+    color: var(--accent-money);
+}
+
+body.money-mode .noise-overlay {
+    opacity: 0.03; /* Ruído diminui, tudo fica "limpo" */
+}
+
+body.money-mode .dual-text {
+    color: var(--accent-money);
+    border-color: transparent;
+    background: rgba(212, 175, 55, 0.1);
+}
+
+body.money-mode .trigger-btn {
+    background: var(--accent-money);
+    color: #fff;
+    border-color: var(--accent-money);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+}
+
+body.money-mode .listen-btn {
+    background: var(--accent-money);
+    color: white;
+    border: none;
+}
+
+/* Botão final */
+.listen-btn {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    border: 1px solid var(--text-real);
+    text-decoration: none;
+    color: var(--text-real);
+    font-family: var(--font-serif);
+    transition: all 0.3s;
 }
