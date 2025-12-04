@@ -1,150 +1,115 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Share+Tech+Mono&display=swap');
-
 :root {
-    --bg-real: #050505;
-    --text-real: #b0b0b0;
-    --accent-real: #8a0000; /* Vermelho sangue */
-    
-    --bg-money: #ffffff;
-    --text-money: #1a1a1a;
-    --accent-money: #d4af37; /* Ouro */
-    
-    --font-serif: 'Cinzel', serif;
-    --font-mono: 'Share Tech Mono', monospace;
+    --dark: #0f0f0f;
+    --red-alert: #ff0000;
+    --gold: #d4af37;
+    --font-title: 'Cinzel', serif;
+    --font-body: monospace;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    background-color: var(--bg-real);
-    color: var(--text-real);
-    font-family: var(--font-mono);
+    background-color: var(--dark);
+    color: white;
+    font-family: var(--font-body);
     overflow-x: hidden;
-    transition: background-color 0.8s ease, color 0.5s ease;
-    cursor: crosshair;
 }
 
-/* Efeito de Ruído (Noise) na tela inteira */
-.noise-overlay {
+/* Header de Rastreamento (Simula o Andar) */
+#tracker {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: url('https://grainy-gradients.vercel.app/noise.svg');
-    opacity: 0.15;
-    pointer-events: none;
-    z-index: 999;
+    top: 0; left: 0; width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    border-bottom: 2px solid var(--red-alert);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    z-index: 1000;
+    color: var(--red-alert);
 }
 
-/* Estrutura das Seções */
-.track-section {
-    min-height: 100vh;
+/* Os Níveis (Andares) */
+.level {
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 2rem;
-    border-bottom: 1px solid #222;
+    padding: 0 5%;
     position: relative;
+    /* Fundo escuro padrão com leve glitch/ruído */
+    background: var(--dark) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><rect width="2" height="2" fill="%231a1a1a"/><rect x="2" y="2" width="2" height="2" fill="%231a1a1a"/></svg>');
+    background-size: 4px 4px;
+    opacity: 0.9;
+    transition: opacity 0.5s;
 }
 
-/* Tipografia */
-h1.glitch-title {
-    font-family: var(--font-serif);
-    font-size: 4rem;
-    text-transform: uppercase;
-    letter-spacing: 5px;
+.track-number {
+    font-size: 1.5rem;
+    color: var(--gold);
     margin-bottom: 1rem;
-    position: relative;
 }
 
 .track-title {
-    font-family: var(--font-serif);
-    font-size: 2rem;
-    color: var(--accent-real);
-    margin-bottom: 2rem;
-    transition: color 0.5s;
-}
-
-.lyrics-container {
-    font-size: 1.5rem;
-    line-height: 1.8;
-    max-width: 800px;
-}
-
-/* Texto Dual (A Mágica acontece aqui) */
-.dual-text {
-    position: relative;
-    display: inline-block;
-    border-bottom: 2px solid var(--accent-real);
-    transition: all 0.3s;
-}
-
-/* O Botão de Controle */
-.money-trigger {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-}
-
-.trigger-btn {
-    background: transparent;
-    border: 1px solid var(--text-real);
-    padding: 15px 30px;
-    color: var(--text-real);
-    font-family: var(--font-mono);
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.3s;
-    background: rgba(0,0,0,0.8);
-}
-
-.trigger-btn:active {
-    transform: scale(0.95);
-}
-
-/* --- MODO DINHEIRO (Ativado via JS) --- */
-body.money-mode {
-    background-color: var(--bg-money);
-    color: var(--text-money);
-}
-
-body.money-mode .track-title {
-    color: var(--accent-money);
-}
-
-body.money-mode .noise-overlay {
-    opacity: 0.03; /* Ruído diminui, tudo fica "limpo" */
-}
-
-body.money-mode .dual-text {
-    color: var(--accent-money);
-    border-color: transparent;
-    background: rgba(212, 175, 55, 0.1);
-}
-
-body.money-mode .trigger-btn {
-    background: var(--accent-money);
-    color: #fff;
-    border-color: var(--accent-money);
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
-}
-
-body.money-mode .listen-btn {
-    background: var(--accent-money);
+    font-family: var(--font-title);
+    font-size: 3.5rem;
     color: white;
-    border: none;
+    text-shadow: 0 0 5px var(--red-alert);
+    text-transform: uppercase;
 }
 
-/* Botão final */
-.listen-btn {
-    display: inline-block;
-    margin-top: 2rem;
-    padding: 1rem 2rem;
-    border: 1px solid var(--text-real);
-    text-decoration: none;
-    color: var(--text-real);
-    font-family: var(--font-serif);
-    transition: all 0.3s;
+.lyric-snippet {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    max-width: 600px;
+    border-bottom: 1px dashed var(--red-alert);
+    padding-bottom: 5px;
+}
+
+/* ---------------------------------- */
+/* Estilos Específicos para as Interações (Placeholders) */
+/* ---------------------------------- */
+
+/* NÍVEL 7: S.U.S (ECG) */
+#track-7 {
+    background-color: #000;
+}
+.visual-ecg {
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(to right, transparent, #00ff00, transparent);
+    box-shadow: 0 0 10px #00ff00;
+    /* Simulação de batimento/falha via JS/Animation */
+}
+
+/* NÍVEL 6: FUMAÇA */
+#track-6::before {
+    content: '';
+    position: absolute;
+    width: 100%; height: 100%;
+    background: rgba(80, 70, 0, 0.4); /* Cor de fumaça marrom/cinza */
+    pointer-events: none;
+    transition: opacity 1s;
+    opacity: 0.8; 
+}
+.visual-fumaça { z-index: 10; }
+
+/* NÍVEL 2: STROBO (CENAS DE HORROR) */
+#track-2 {
+    background-color: #000;
+}
+.visual-strobo {
+    /* Usar JS para alternar classes que mudam o background entre preto e vermelho */
+}
+
+/* Mensagem final */
+.final-message {
+    height: 50vh;
+    background-color: #000;
+    color: var(--gold);
+    font-family: var(--font-title);
+    border: none;
 }
